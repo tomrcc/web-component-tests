@@ -10,12 +10,26 @@ export default class SimpleButton extends HTMLElement {
   connectedCallback() {
     const { shadowRoot } = this;
     
-    // Create template element from imported HTML
-    const template = document.createElement("template");
-    template.innerHTML = templateHTML;
+    if (!shadowRoot) {
+      console.error("Shadow root not available");
+      return;
+    }
     
-    const node = document.importNode(template.content, true).cloneNode(true);
-    shadowRoot?.appendChild(node);
+    // Create a temporary container to parse the imported HTML
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = templateHTML;
+    
+    // Find the template element within the imported HTML
+    const template = tempContainer.querySelector("template");
+    
+    if (!template) {
+      console.error("Template element not found in imported HTML");
+      return;
+    }
+    
+    // Clone and append the template content
+    const node = document.importNode(template.content, true);
+    shadowRoot.appendChild(node);
 
     // Add click handler
     const button = shadowRoot?.querySelector("button");

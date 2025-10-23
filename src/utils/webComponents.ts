@@ -3,34 +3,23 @@
  * Automatically loads and registers all web components from the web-components directory
  */
 
-interface WebComponentModule {
-  default: CustomElementConstructor;
-}
-
 /**
  * Initialize all web components
- * This function automatically discovers and registers all web components
+ * This function automatically discovers and imports all web components.
+ * The components self-register when imported.
  */
 export async function initializeWebComponents(): Promise<void> {
   try {
     // Load all TypeScript web component files
+    // Using eager: true ensures they're imported immediately
     const webComponents = import.meta.glob("/src/web-components/**/*.ts", {
       eager: true,
-    }) as Record<string, WebComponentModule>;
-
-    // Register each component
-    Object.entries(webComponents).forEach(([path, module]) => {
-      const componentName = extractComponentName(path);
-      if (componentName && module.default) {
-        // Check if component is already registered
-        if (!customElements.get(componentName)) {
-          customElements.define(componentName, module.default);
-          console.debug(`Registered web component: ${componentName}`);
-        }
-      }
     });
 
-    console.log("Available web components:", Object.keys(webComponents));
+    console.log("Web components loaded:", Object.keys(webComponents).map(path => {
+      const match = path.match(/\/src\/web-components\/([^\/]+)\.ts$/);
+      return match ? match[1] : path;
+    }));
     
     // Store components on window for debugging
     (window as any).webComponents = webComponents;
@@ -38,13 +27,4 @@ export async function initializeWebComponents(): Promise<void> {
   } catch (error) {
     console.error("Failed to initialize web components:", error);
   }
-}
-
-/**
- * Extract component name from file path
- * e.g., "/src/web-components/fade-scroller.ts" -> "fade-scroller"
- */
-function extractComponentName(filePath: string): string | null {
-  const match = filePath.match(/\/src\/web-components\/([^\/]+)\.ts$/);
-  return match ? match[1] : null;
 }
