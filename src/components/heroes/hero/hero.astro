@@ -79,7 +79,9 @@ const headingGradientColor = heading.heading_gradient_color;
   </div>
   <div style="height: 300px; margin: 2rem 0; border: 1px solid #ccc;">
     <fade-scroller>
-      <div style="padding: 1rem;">{subheading.text_content}</div>
+      <div style="padding: 1rem;">
+        <Markdown content={subheading.text_content} />
+      </div>
     </fade-scroller>
   </div>
 </section>
