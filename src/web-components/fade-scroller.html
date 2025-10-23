@@ -1,0 +1,74 @@
+<template id="fade-scroller">
+  <style>
+    .fade__container {
+      block-size: 100%;
+
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .fade__scroller {
+      overflow-y: auto;
+    }
+
+    .fade__content__wrapper {
+      position: relative;
+    }
+
+    .fader {
+      position: absolute;
+      margin: 0;
+
+      display: block;
+      user-select: none;
+      background-image: var(--mask);
+      block-size: var(--fade-size, 1lh);
+      inline-size: 100%;
+
+      z-index: 1;
+    }
+
+    .fade__content__start,
+    .fade__content__end {
+      block-size: 1lh;
+      inline-size: 100%;
+      position: absolute;
+    }
+
+    .fade__content__start {
+      top: 0px;
+    }
+
+    .fade__content__end {
+      bottom: 0px;
+    }
+
+    .fader.visible {
+      visibility: visible;
+    }
+
+    .start {
+      --mask: linear-gradient(to top, transparent, var(--light-background));
+
+      inset-block-start: 0;
+    }
+
+    .end {
+      --mask: linear-gradient(to bottom, transparent, var(--light-background));
+
+      inset-block-end: 0;
+    }
+  </style>
+  <div class="fade__container">
+    <div class="fade__scroller">
+      <div class="fade__content__wrapper">
+        <div class="fade__content__start"></div>
+        <slot></slot>
+        <div class="fade__content__end"></div>
+      </div>
+    </div>
+    <div class="fader start"></div>
+    <div class="fader end"></div>
+  </div>
+</template>
