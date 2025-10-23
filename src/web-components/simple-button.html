@@ -1,0 +1,26 @@
+<template id="simple-button">
+  <style>
+    button {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 12px 24px;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+  </style>
+  <button>
+    <slot>Click me!</slot>
+  </button>
+</template>

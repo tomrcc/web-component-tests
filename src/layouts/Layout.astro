@@ -120,6 +120,21 @@ const headerStyleOverrides = hero_block?.header_style_overrides ?? {};
     <Header headerStyleOverrides={headerStyleOverrides} />
     <main>
       <slot />
+
+      <!-- Web Components Initialization -->
+      <script>
+        import { initializeWebComponents } from "../utils/webComponents.ts";
+
+        // Initialize web components when DOM is ready
+        if (document.readyState === "loading") {
+          document.addEventListener(
+            "DOMContentLoaded",
+            initializeWebComponents
+          );
+        } else {
+          initializeWebComponents();
+        }
+      </script>
     </main>
     <Footer />
     <style is:global>
@@ -135,6 +150,9 @@ const headerStyleOverrides = hero_block?.header_style_overrides ?? {};
         /* Logo size is calculated by subtracting headerPadding * 2 from the headerHeight */
         --headerHeight: 4rem;
         --headerPadding: 1rem;
+
+        /* Web component variables */
+        --light-background: #ffffff;
 
         box-sizing: border-box;
       }
